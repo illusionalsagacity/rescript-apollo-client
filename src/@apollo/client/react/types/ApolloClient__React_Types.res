@@ -63,7 +63,7 @@ module QueryHookOptions = {
     partialRefetch?: bool,
     pollInterval?: int,
     // INTENTIONALLY IGNORED (but now with safeParse and result unwrapping, maybe it shouldn't be?)
-    // returnPartialData: option(bool),
+    // returnPartialData?: bool,
     ssr?: bool,
     variables: 'variables,
   }
@@ -181,7 +181,7 @@ module QueryLazyOptions = {
     // }
     type t<'jsVariables> = {
       variables: 'jsVariables,
-      context: option<Js.Json.t>,
+      context?: Js.Json.t,
     }
   }
 
@@ -617,7 +617,7 @@ module QueryTuple = {
   ) => (
     (~context=?, ~mapJsVariables=ApolloClient__Utils.identity, variables) =>
       jsExecuteQuery({
-        context,
+        ?context,
         variables: variables->serializeVariables->mapJsVariables,
       }) |> Js.Promise.then_(jsResult =>
         QueryResult.fromJs(
@@ -661,7 +661,7 @@ module QueryTuple__noVariables = {
   ) => (
     (~context=?, ()) =>
       jsExecuteQuery({
-        context,
+        ?context,
         variables: variables->serializeVariables->mapJsVariables,
       }) |> Js.Promise.then_(jsResult =>
         QueryResult.fromJs(
