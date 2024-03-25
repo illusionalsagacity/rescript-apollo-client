@@ -47,24 +47,24 @@ module QueryHookOptions = {
   }
 
   type t<'data, 'variables> = {
-    query: option<Graphql.documentNode>,
+    query?: Graphql.documentNode,
     // ...extends QueryFunctionOptions
-    displayName: option<string>,
-    skip: option<bool>,
-    onCompleted: option<Types.parseResult<'data> => unit>,
-    onError: option<ApolloError.t => unit>,
+    displayName?: string,
+    skip?: bool,
+    onCompleted?: Types.parseResult<'data> => unit,
+    onError?: ApolloError.t => unit,
     // ...extends BaseQueryOptions
-    client: option<ApolloClient.t>,
-    context: option<Js.Json.t>,
-    errorPolicy: option<ErrorPolicy.t>,
-    fetchPolicy: option<WatchQueryFetchPolicy.t>,
-    nextFetchPolicy: option<WatchQueryFetchPolicy.t>,
-    notifyOnNetworkStatusChange: option<bool>,
-    partialRefetch: option<bool>,
-    pollInterval: option<int>,
+    client?: ApolloClient.t,
+    context?: Js.Json.t,
+    errorPolicy?: ErrorPolicy.t,
+    fetchPolicy?: WatchQueryFetchPolicy.t,
+    nextFetchPolicy?: WatchQueryFetchPolicy.t,
+    notifyOnNetworkStatusChange?: bool,
+    partialRefetch?: bool,
+    pollInterval?: int,
     // INTENTIONALLY IGNORED (but now with safeParse and result unwrapping, maybe it shouldn't be?)
     // returnPartialData: option(bool),
-    ssr: option<bool>,
+    ssr?: bool,
     variables: 'variables,
   }
 
