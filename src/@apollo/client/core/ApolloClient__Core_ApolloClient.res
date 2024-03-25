@@ -53,6 +53,7 @@ module DefaultWatchQueryOptions = {
     context: ?t.context,
   }
 
+  @deprecated("Just construct t instead")
   let make = (~fetchPolicy=?, ~errorPolicy=?, ~context=?, ()) => {
     ?fetchPolicy,
     ?errorPolicy,
@@ -84,6 +85,7 @@ module DefaultQueryOptions = {
     context: ?t.context,
   }
 
+  @deprecated("Just construct t instead")
   let make = (~fetchPolicy=?, ~errorPolicy=?, ~context=?, ()) => {
     ?fetchPolicy,
     ?errorPolicy,
