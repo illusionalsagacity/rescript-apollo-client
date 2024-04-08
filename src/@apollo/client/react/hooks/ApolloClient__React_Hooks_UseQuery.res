@@ -116,7 +116,7 @@ module Extend = (M: Operation) => {
     RefetchQueryDescription.PureQueryOptions({
       query: M.query,
       variables: jsVariables,
-      context: context,
+      context: ?context,
     })
   }
 

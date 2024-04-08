@@ -27,20 +27,20 @@ module PureQueryOptions = {
       query: Graphql.documentNode,
       // We don't allow optional variables because it's not typesafe
       variables: 'jsVariables,
-      context: option<Js.Json.t>,
+      context?: Js.Json.t,
     }
   }
 
   type t<'jsVariables> = {
     query: Graphql.documentNode,
     variables: 'jsVariables,
-    context: option<Js.Json.t>,
+    context?: Js.Json.t,
   }
 
   let toJs: t<'jsVariables> => Js_.t<'jsVariables> = t => {
     query: t.query,
     variables: t.variables,
-    context: t.context,
+    context: ?t.context,
   }
 }
 

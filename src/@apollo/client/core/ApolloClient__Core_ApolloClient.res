@@ -725,11 +725,11 @@ let make: (
       jsClient,
       ~options=QueryOptions.toJs(
         {
-          fetchPolicy,
+          ?fetchPolicy,
           query: Operation.query,
           variables,
-          errorPolicy,
-          context,
+          ?errorPolicy,
+          ?context,
         },
         ~mapJsVariables,
         ~serializeVariables=Operation.serializeVariables,
@@ -908,13 +908,13 @@ let make: (
     ->Js_.watchQuery(
       ~options=WatchQueryOptions.toJs(
         {
-          fetchPolicy,
-          nextFetchPolicy,
+          ?fetchPolicy,
+          ?nextFetchPolicy,
           query: Operation.query,
           variables,
-          errorPolicy,
-          context,
-          pollInterval,
+          ?errorPolicy,
+          ?context,
+          ?pollInterval,
         },
         ~mapJsVariables,
         ~serializeVariables=Operation.serializeVariables,

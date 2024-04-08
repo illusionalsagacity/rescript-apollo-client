@@ -88,22 +88,22 @@ module WatchQueryFetchPolicy = {
 module QueryOptions = {
   module Js_ = {
     type t<'jsVariables> = {
-      fetchPolicy: option<FetchPolicy.Js_.t>,
+      fetchPolicy?: FetchPolicy.Js_.t,
       // ...extends QueryBaseOptions
       query: Graphql.documentNode,
       // We don't allow optional variables because it's not typesafe
       variables: 'jsVariables,
-      errorPolicy: option<ErrorPolicy.Js_.t>,
-      context: option<Js.Json.t>,
+      errorPolicy?: ErrorPolicy.Js_.t,
+      context?: Js.Json.t,
     }
   }
 
   type t<'jsVariables> = {
-    fetchPolicy: option<FetchPolicy.t>,
+    fetchPolicy?: FetchPolicy.t,
     query: Graphql.documentNode,
     variables: 'jsVariables,
-    errorPolicy: option<ErrorPolicy.t>,
-    context: option<Js.Json.t>,
+    errorPolicy?: ErrorPolicy.t,
+    context?: Js.Json.t,
   }
 
   let toJs: (
@@ -111,37 +111,37 @@ module QueryOptions = {
     ~mapJsVariables: 'jsVariables => 'jsVariables,
     ~serializeVariables: 'variables => 'jsVariables,
   ) => Js_.t<'jsVariables> = (t, ~mapJsVariables, ~serializeVariables) => {
-    fetchPolicy: t.fetchPolicy->Belt.Option.map(FetchPolicy.toJs),
+    fetchPolicy: ?t.fetchPolicy->Belt.Option.map(FetchPolicy.toJs),
     query: t.query,
     variables: t.variables->serializeVariables->mapJsVariables,
-    errorPolicy: t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
-    context: t.context,
+    errorPolicy: ?t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
+    context: ?t.context,
   }
 }
 
 module WatchQueryOptions = {
   module Js_ = {
     type t<'jsVariables> = {
-      fetchPolicy: option<WatchQueryFetchPolicy.Js_.t>,
-      nextFetchPolicy: option<WatchQueryFetchPolicy.Js_.t>,
+      fetchPolicy?: WatchQueryFetchPolicy.Js_.t,
+      nextFetchPolicy?: WatchQueryFetchPolicy.Js_.t,
       // ...extends QueryBaseOptions
       query: Graphql.documentNode,
       // We don't allow optional variables because it's not typesafe
       variables: 'jsVariables,
-      errorPolicy: option<ErrorPolicy.Js_.t>,
-      context: option<Js.Json.t>,
-      pollInterval: option<int>,
+      errorPolicy?: ErrorPolicy.Js_.t,
+      context?: Js.Json.t,
+      pollInterval?: int,
     }
   }
 
   type t<'jsVariables> = {
-    fetchPolicy: option<WatchQueryFetchPolicy.t>,
-    nextFetchPolicy: option<WatchQueryFetchPolicy.t>,
+    fetchPolicy?: WatchQueryFetchPolicy.t,
+    nextFetchPolicy?: WatchQueryFetchPolicy.t,
     query: Graphql.documentNode,
     variables: 'jsVariables,
-    errorPolicy: option<ErrorPolicy.t>,
-    context: option<Js.Json.t>,
-    pollInterval: option<int>,
+    errorPolicy?: ErrorPolicy.t,
+    context?: Js.Json.t,
+    pollInterval?: int,
   }
 
   let toJs: (
@@ -149,13 +149,13 @@ module WatchQueryOptions = {
     ~mapJsVariables: 'jsVariables => 'jsVariables,
     ~serializeVariables: 'variables => 'jsVariables,
   ) => Js_.t<'jsVariables> = (t, ~mapJsVariables, ~serializeVariables) => {
-    fetchPolicy: t.fetchPolicy->Belt.Option.map(WatchQueryFetchPolicy.toJs),
-    nextFetchPolicy: t.nextFetchPolicy->Belt.Option.map(WatchQueryFetchPolicy.toJs),
+    fetchPolicy: ?t.fetchPolicy->Belt.Option.map(WatchQueryFetchPolicy.toJs),
+    nextFetchPolicy: ?t.nextFetchPolicy->Belt.Option.map(WatchQueryFetchPolicy.toJs),
     query: t.query,
     variables: t.variables->serializeVariables->mapJsVariables,
-    errorPolicy: t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
-    context: t.context,
-    pollInterval: t.pollInterval,
+    errorPolicy: ?t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
+    context: ?t.context,
+    pollInterval: ?t.pollInterval,
   }
 }
 

@@ -194,8 +194,8 @@ module QueryResult = {
 
   module Js_ = {
     type t_fetchMoreOptions_updateQueryOptions<'jsData, 'jsVariables> = {
-      fetchMoreResult: option<'jsData>,
-      variables: option<'jsVariables>,
+      fetchMoreResult?: 'jsData,
+      variables?: 'jsVariables,
     }
 
     type t_fetchMoreOptions<'jsData, 'jsVariables> = {
