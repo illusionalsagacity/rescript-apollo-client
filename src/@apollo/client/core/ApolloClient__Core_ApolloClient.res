@@ -80,8 +80,14 @@ module DefaultQueryOptions = {
   }
 
   let toJs: t => Js_.t = t => {
-    fetchPolicy: ?t.fetchPolicy->Belt.Option.map(FetchPolicy.toJs),
-    errorPolicy: ?t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
+    fetchPolicy: ?switch t.fetchPolicy {
+    | Some(fetchPolicy) => FetchPolicy.toJs(fetchPolicy)->Some
+    | None => None
+    },
+    errorPolicy: ?switch t.errorPolicy {
+      | Some(errorPolicy) => ErrorPolicy.toJs(errorPolicy)->Some
+      | None => None
+    },
     context: ?t.context,
   }
 

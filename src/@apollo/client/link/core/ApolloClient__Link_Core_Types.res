@@ -16,10 +16,10 @@ module GraphQLRequest = {
     // }
     type t = {
       query: Graphql.documentNode,
-      variables: option<Js.Json.t>,
-      operationName: option<string>,
-      context: option<Js.Json.t>,
-      extensions: option<Js.Json.t>,
+      variables?: Js.Json.t,
+      operationName?: string,
+      context?: Js.Json.t,
+      extensions?: Js.Json.t,
     }
   }
 
@@ -118,7 +118,7 @@ module FetchResult = {
       ~graphQLErrors=?js.errors,
       safeParse,
     )
-    {data: data, error: error, extensions: js.extensions, context: js.context}
+    {data, error, extensions: js.extensions, context: js.context}
   }
 
   let fromError: ApolloError.t => t<'data> = error => {
@@ -139,7 +139,7 @@ module FetchResult = {
     switch fetchResult {
     | {data: Some(data)} =>
       Ok({
-        data: data,
+        data,
         error: fetchResult.error,
         extensions: fetchResult.extensions,
         context: fetchResult.context,
@@ -180,5 +180,5 @@ module RequestHandler = {
     NextLink.Js_.t,
   ) => option<Observable.t<FetchResult.Js_.t<Js.Json.t>, Js.Exn.t>>
 
-  let toJs: t => Js_.t = (t, . operation, forward) => t(operation, forward)->Js.Null.fromOption
+  let toJs: t => Js_.t = t => (. operation, forward) => t(operation, forward)->Js.Null.fromOption
 }
