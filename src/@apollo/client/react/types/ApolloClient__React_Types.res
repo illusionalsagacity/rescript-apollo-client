@@ -465,11 +465,11 @@ module QueryResult = {
           {
             document: Operation.query,
             variables,
-            updateQuery,
-            onError: onError->Belt.Option.map((onError, error) =>
+            ?updateQuery,
+            onError: ?onError->Belt.Option.map((onError, error) =>
               onError(SubscriptionError(error))
             ),
-            context,
+            ?context,
           },
           ~onUpdateQueryParseError=parseError =>
             switch onError {
@@ -866,23 +866,23 @@ module MutationFunctionOptions = {
     type t<'jsData, 'jsVariables> = {
       // We don't allow optional variables because it's not typesafe
       variables: 'jsVariables,
-      optimisticResponse: option<(. 'jsVariables) => 'jsData>,
-      refetchQueries: option<RefetchQueryDescription.Js_.t>,
-      awaitRefetchQueries: option<bool>,
-      update: option<MutationUpdaterFn.Js_.t<'jsData>>,
-      context: option<Js.Json.t>, // actual: option(Context)
-      fetchPolicy: option<WatchQueryFetchPolicy.Js_.t>,
+      optimisticResponse?: (. 'jsVariables) => 'jsData,
+      refetchQueries?: RefetchQueryDescription.Js_.t,
+      awaitRefetchQueries?: bool,
+      update?: MutationUpdaterFn.Js_.t<'jsData>,
+      context?: Js.Json.t, // actual: option<Context>
+      fetchPolicy?: WatchQueryFetchPolicy.Js_.t,
     }
   }
 
   type t<'data, 'variables, 'jsVariables> = {
     variables: 'variables,
-    optimisticResponse: option<'jsVariables => 'data>,
-    refetchQueries: option<RefetchQueryDescription.t>,
-    awaitRefetchQueries: option<bool>,
-    update: option<MutationUpdaterFn.t<'data>>,
-    context: option<Js.Json.t>, // actual: option(Context)
-    fetchPolicy: option<WatchQueryFetchPolicy.t>,
+    optimisticResponse?: 'jsVariables => 'data,
+    refetchQueries?: RefetchQueryDescription.t,
+    awaitRefetchQueries?: bool,
+    update?: MutationUpdaterFn.t<'data>,
+    context?: Js.Json.t, // actual: option(Context)
+    fetchPolicy?: WatchQueryFetchPolicy.t,
   }
 
   let toJs: (
@@ -899,14 +899,14 @@ module MutationFunctionOptions = {
     ~serializeVariables,
   ) => {
     variables: t.variables->serializeVariables->mapJsVariables,
-    optimisticResponse: t.optimisticResponse->Belt.Option.map(optimisticResponse =>
+    optimisticResponse: ?t.optimisticResponse->Belt.Option.map(optimisticResponse =>
       (. variables) => optimisticResponse(variables)->serialize
     ),
-    refetchQueries: t.refetchQueries->Belt.Option.map(RefetchQueryDescription.toJs),
-    awaitRefetchQueries: t.awaitRefetchQueries,
-    update: t.update->Belt.Option.map(MutationUpdaterFn.toJs(~safeParse)),
-    context: t.context,
-    fetchPolicy: t.fetchPolicy->Belt.Option.map(WatchQueryFetchPolicy.toJs),
+    refetchQueries: ?t.refetchQueries->Belt.Option.map(RefetchQueryDescription.toJs),
+    awaitRefetchQueries: ?t.awaitRefetchQueries,
+    update: ?t.update->Belt.Option.map(MutationUpdaterFn.toJs(~safeParse)),
+    context: ?t.context,
+    fetchPolicy: ?t.fetchPolicy->Belt.Option.map(WatchQueryFetchPolicy.toJs),
   }
 }
 
@@ -963,12 +963,12 @@ module MutationTuple = {
           MutationFunctionOptions.toJs(
             {
               variables,
-              optimisticResponse,
-              refetchQueries,
-              awaitRefetchQueries,
-              update,
-              context,
-              fetchPolicy,
+              ?optimisticResponse,
+              ?refetchQueries,
+              ?awaitRefetchQueries,
+              ?update,
+              ?context,
+              ?fetchPolicy,
             },
             ~mapJsVariables,
             ~safeParse,
@@ -1040,12 +1040,12 @@ module MutationTuple__noVariables = {
           MutationFunctionOptions.toJs(
             {
               variables,
-              optimisticResponse,
-              refetchQueries,
-              awaitRefetchQueries,
-              update,
-              context,
-              fetchPolicy,
+              ?optimisticResponse,
+              ?refetchQueries,
+              ?awaitRefetchQueries,
+              ?update,
+              ?context,
+              ?fetchPolicy,
             },
             ~mapJsVariables,
             ~safeParse,
@@ -1143,36 +1143,36 @@ module BaseSubscriptionOptions = {
     //     onSubscriptionComplete?: () => void;
     // }
     type rec t<'jsData, 'jsVariables> = {
-      variables: option<'jsVariables>,
-      fetchPolicy: option<FetchPolicy.t>,
-      shouldResubscribe: option<(. t<'jsData, 'jsVariables>) => bool>,
-      client: option<ApolloClient.t>,
-      skip: option<bool>,
-      onSubscriptionData: option<(. OnSubscriptionDataOptions.Js_.t<'jsData>) => unit>,
-      onSubscriptionComplete: option<unit => unit>,
+      variables?: 'jsVariables,
+      fetchPolicy?: FetchPolicy.t,
+      shouldResubscribe?: (. t<'jsData, 'jsVariables>) => bool,
+      client?: ApolloClient.t,
+      skip?: bool,
+      onSubscriptionData?: (. OnSubscriptionDataOptions.Js_.t<'jsData>) => unit,
+      onSubscriptionComplete?: unit => unit,
     }
   }
 
   type rec t<'data, 'jsVariables> = {
-    variables: option<'jsVariables>,
-    fetchPolicy: option<FetchPolicy.t>,
-    shouldResubscribe: option<t<'data, 'jsVariables> => bool>,
-    client: option<ApolloClient.t>,
-    skip: option<bool>,
-    onSubscriptionData: option<OnSubscriptionDataOptions.t<'data> => unit>,
-    onSubscriptionComplete: option<unit => unit>,
+    variables?: 'jsVariables,
+    fetchPolicy?: FetchPolicy.t,
+    shouldResubscribe?: t<'data, 'jsVariables> => bool,
+    client?: ApolloClient.t,
+    skip?: bool,
+    onSubscriptionData?: OnSubscriptionDataOptions.t<'data> => unit,
+    onSubscriptionComplete?: unit => unit,
   }
 
   let fromJs: Js_.t<'jsData, 'jsVariables> => t<'data, 'jsVariables> = js => {
-    variables: js.variables,
-    fetchPolicy: js.fetchPolicy,
+    variables: ?js.variables,
+    fetchPolicy: ?js.fetchPolicy,
     // shouldResubscribe: what to do here?
-    shouldResubscribe: Obj.magic(js.shouldResubscribe),
-    client: js.client,
-    skip: js.skip,
+    shouldResubscribe: ?Obj.magic(js.shouldResubscribe),
+    client: ?js.client,
+    skip: ?js.skip,
     // onSubscriptionData: what to do here?
-    onSubscriptionData: Obj.magic(js.onSubscriptionData),
-    onSubscriptionComplete: js.onSubscriptionComplete,
+    onSubscriptionData: ?Obj.magic(js.onSubscriptionData),
+    onSubscriptionComplete: ?js.onSubscriptionComplete,
   }
 }
 
@@ -1196,14 +1196,14 @@ module SubscriptionHookOptions = {
   }
 
   type t<'data, 'variables, 'jsVariables> = {
-    subscription: option<Graphql.documentNode>,
+    subscription?: Graphql.documentNode,
     variables: 'variables,
-    fetchPolicy: option<FetchPolicy.t>,
-    shouldResubscribe: option<BaseSubscriptionOptions.t<'data, 'jsVariables> => bool>,
-    client: option<ApolloClient.t>,
-    skip: option<bool>,
-    onSubscriptionData: option<OnSubscriptionDataOptions.t<'data> => unit>,
-    onSubscriptionComplete: option<unit => unit>,
+    fetchPolicy?: FetchPolicy.t,
+    shouldResubscribe?: BaseSubscriptionOptions.t<'data, 'jsVariables> => bool,
+    client?: ApolloClient.t,
+    skip?: bool,
+    onSubscriptionData?: OnSubscriptionDataOptions.t<'data> => unit,
+    onSubscriptionComplete?: unit => unit,
   }
 
   let toJs: (

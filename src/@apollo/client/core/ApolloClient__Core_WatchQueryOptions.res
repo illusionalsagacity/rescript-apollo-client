@@ -231,20 +231,19 @@ module SubscribeToMoreOptions = {
       document: Graphql.documentNode,
       // We don't allow optional variables because it's not typesafe
       variables: 'subscriptionVariables,
-      updateQuery: option<
+      updateQuery?: 
         UpdateQueryFn.Js_.t<'jsQueryData, 'subscriptionVariables, 'jsSubscriptionData>,
-      >,
-      onError: option<Js.Exn.t => unit>,
-      context: option<Js.Json.t>,
+      onError?: Js.Exn.t => unit,
+      context?: Js.Json.t,
     }
   }
 
   type t<'queryData, 'subscriptionVariables, 'subscriptionData> = {
     document: Graphql.documentNode,
     variables: 'subscriptionVariables,
-    updateQuery: option<UpdateQueryFn.t<'queryData, 'subscriptionVariables, 'subscriptionData>>,
-    onError: option<Js.Exn.t => unit>,
-    context: option<Js.Json.t>,
+    updateQuery?: UpdateQueryFn.t<'queryData, 'subscriptionVariables, 'subscriptionData>,
+    onError?: Js.Exn.t => unit,
+    context?: Js.Json.t,
   }
 
   let toJs: (
@@ -262,7 +261,7 @@ module SubscribeToMoreOptions = {
   ) => {
     document: t.document,
     variables: t.variables,
-    updateQuery: t.updateQuery->Belt.Option.map(
+    updateQuery: ?t.updateQuery->Belt.Option.map(
       UpdateQueryFn.toJs(
         ~onParseError=onUpdateQueryParseError,
         ~querySafeParse,
@@ -270,8 +269,8 @@ module SubscribeToMoreOptions = {
         ~subscriptionSafeParse,
       ),
     ),
-    onError: t.onError,
-    context: t.context,
+    onError: ?t.onError,
+    context: ?t.context,
   }
 }
 
@@ -288,18 +287,18 @@ module SubscriptionOptions = {
       query: Graphql.documentNode,
       // We don't allow optional variables because it's not typesafe
       variables: 'jsVariables,
-      fetchPolicy: option<FetchPolicy.Js_.t>,
-      errorPolicy: option<ErrorPolicy.Js_.t>,
-      context: option<Js.Json.t>,
+      fetchPolicy?: FetchPolicy.Js_.t,
+      errorPolicy?: ErrorPolicy.Js_.t,
+      context?: Js.Json.t,
     }
   }
 
   type t<'variables> = {
     query: Graphql.documentNode,
     variables: 'variables,
-    fetchPolicy: option<FetchPolicy.t>,
-    errorPolicy: option<ErrorPolicy.t>,
-    context: option<Js.Json.t>,
+    fetchPolicy?: FetchPolicy.t,
+    errorPolicy?: ErrorPolicy.t,
+    context?: Js.Json.t,
   }
 
   let toJs: (
@@ -309,9 +308,9 @@ module SubscriptionOptions = {
   ) => Js_.t<'jsVariables> = (t, ~mapJsVariables, ~serializeVariables) => {
     query: t.query,
     variables: t.variables->serializeVariables->mapJsVariables,
-    fetchPolicy: t.fetchPolicy->Belt.Option.map(FetchPolicy.toJs),
-    errorPolicy: t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
-    context: t.context,
+    fetchPolicy: ?t.fetchPolicy->Belt.Option.map(FetchPolicy.toJs),
+    errorPolicy: ?t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
+    context: ?t.context,
   }
 }
 
@@ -371,31 +370,31 @@ module MutationOptions = {
     // }
     type t<'jsData, 'jsVariables> = {
       mutation: Graphql.documentNode,
-      context: option<Js.Json.t>,
-      fetchPolicy: option<FetchPolicy__noCacheExtracted.Js_.t>,
+      context?: Js.Json.t,
+      fetchPolicy?: FetchPolicy__noCacheExtracted.Js_.t,
       // ...extends MutationBaseOption,
-      awaitRefetchQueries: option<bool>,
-      errorPolicy: option<ErrorPolicy.Js_.t>,
-      optimisticResponse: option<(. 'jsVariables) => 'jsData>,
-      update: option<MutationUpdaterFn.Js_.t<'jsData>>,
-      updateQueries: option<MutationQueryReducersMap.Js_.t<'jsData>>,
-      refetchQueries: option<RefetchQueryDescription.Js_.t>,
+      awaitRefetchQueries?: bool,
+      errorPolicy?: ErrorPolicy.Js_.t,
+      optimisticResponse?: (. 'jsVariables) => 'jsData,
+      update?: MutationUpdaterFn.Js_.t<'jsData>,
+      updateQueries?: MutationQueryReducersMap.Js_.t<'jsData>,
+      refetchQueries?: RefetchQueryDescription.Js_.t,
       // We don't allow optional variables because it's not typesafe
       variables: 'jsVariables,
     }
   }
 
   type t<'data, 'variables, 'jsVariables> = {
-    context: option<Js.Json.t>,
-    fetchPolicy: option<FetchPolicy__noCacheExtracted.t>,
+    context?: Js.Json.t,
+    fetchPolicy?: FetchPolicy__noCacheExtracted.t,
     mutation: Graphql.documentNode,
     // ...extends MutationBaseOptions,
-    awaitRefetchQueries: option<bool>,
-    errorPolicy: option<ErrorPolicy.t>,
-    optimisticResponse: option<'jsVariables => 'data>,
-    refetchQueries: option<RefetchQueryDescription.t>,
-    update: option<MutationUpdaterFn.t<'data>>,
-    updateQueries: option<MutationQueryReducersMap.t<'data>>,
+    awaitRefetchQueries?: bool,
+    errorPolicy?: ErrorPolicy.t,
+    optimisticResponse?: 'jsVariables => 'data,
+    refetchQueries?: RefetchQueryDescription.t,
+    update?: MutationUpdaterFn.t<'data>,
+    updateQueries?: MutationQueryReducersMap.t<'data>,
     variables: 'variables,
   }
 
@@ -412,17 +411,17 @@ module MutationOptions = {
     ~serialize,
     ~serializeVariables,
   ) => {
-    awaitRefetchQueries: t.awaitRefetchQueries,
-    context: t.context,
-    errorPolicy: t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
-    fetchPolicy: t.fetchPolicy->Belt.Option.map(FetchPolicy__noCacheExtracted.toJs),
+    awaitRefetchQueries: ?t.awaitRefetchQueries,
+    context: ?t.context,
+    errorPolicy: ?t.errorPolicy->Belt.Option.map(ErrorPolicy.toJs),
+    fetchPolicy: ?t.fetchPolicy->Belt.Option.map(FetchPolicy__noCacheExtracted.toJs),
     mutation: t.mutation,
-    optimisticResponse: t.optimisticResponse->Belt.Option.map(optimisticResponse =>
+    optimisticResponse: ?t.optimisticResponse->Belt.Option.map(optimisticResponse =>
       (. variables) => optimisticResponse(variables)->serialize
     ),
-    refetchQueries: t.refetchQueries->Belt.Option.map(RefetchQueryDescription.toJs),
-    update: t.update->Belt.Option.map(MutationUpdaterFn.toJs(~safeParse)),
-    updateQueries: t.updateQueries->Belt.Option.map(MutationQueryReducersMap.toJs(~safeParse)),
+    refetchQueries: ?t.refetchQueries->Belt.Option.map(RefetchQueryDescription.toJs),
+    update: ?t.update->Belt.Option.map(MutationUpdaterFn.toJs(~safeParse)),
+    updateQueries: ?t.updateQueries->Belt.Option.map(MutationQueryReducersMap.toJs(~safeParse)),
     variables: t.variables->serializeVariables->mapJsVariables,
   }
 }
