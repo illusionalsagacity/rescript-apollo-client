@@ -779,9 +779,9 @@ let make: (
       ~options={
         id,
         fragment: Fragment.query,
-        fragmentName,
-        optimistic,
-        canonizeResults,
+        ?fragmentName,
+        ?optimistic,
+        ?canonizeResults,
       },
       ~optimistic?,
       (),
@@ -809,11 +809,11 @@ let make: (
       jsClient,
       ~options=DataProxy.ReadQueryOptions.toJs(
         {
-          id,
+          ?id,
           query: Operation.query,
           variables,
-          optimistic,
-          canonizeResults,
+          ?optimistic,
+          ?canonizeResults,
         },
         ~mapJsVariables,
         ~serializeVariables=Operation.serializeVariables,
@@ -942,12 +942,12 @@ let make: (
     jsClient->Js_.writeFragment(
       ~options=DataProxy.WriteFragmentOptions.toJs(
         {
-          broadcast,
+          ?broadcast,
           data,
           id,
           fragment: Fragment.query,
-          fragmentName,
-          overwrite,
+          ?fragmentName,
+          ?overwrite,
         },
         ~serialize=Fragment.serialize,
       ),
@@ -970,12 +970,12 @@ let make: (
     jsClient->Js_.writeQuery(
       ~options=DataProxy.WriteQueryOptions.toJs(
         {
-          broadcast,
+          ?broadcast,
           data,
-          id,
+          ?id,
           query: Operation.query,
           variables,
-          overwrite,
+          ?overwrite,
         },
         ~mapJsVariables,
         ~serialize=Operation.serialize,
@@ -1005,13 +1005,13 @@ let make: (
     ->Js_.updateQuery(
       ~options=DataProxy.UpdateQueryOptions.toJs(
         {
-          optimistic,
-          canonizeResults,
-          broadcast,
-          id,
+          ?optimistic,
+          ?canonizeResults,
+          ?broadcast,
+          ?id,
           query: Operation.query,
           variables,
-          overwrite,
+          ?overwrite,
         },
         ~mapJsVariables,
         ~serializeVariables=Operation.serializeVariables,
@@ -1045,13 +1045,13 @@ let make: (
     jsClient
     ->Js_.updateFragment(
       ~options=DataProxy.UpdateFragmentOptions.toJs({
-        optimistic,
-        canonizeResults,
-        broadcast,
+        ?optimistic,
+        ?canonizeResults,
+        ?broadcast,
         id,
         fragment: Fragment.query,
-        fragmentName,
-        overwrite,
+        ?fragmentName,
+        ?overwrite,
       }),
       ~update=jsData =>
         jsData
