@@ -8,7 +8,7 @@ let cache = {
         "Query",
         TypePolicy.make(
           ~fields=[
-            ("someLocalStateField", FieldReadFunction((_existing, _options) => someLocalState())),
+            ("someLocalStateField", FieldReadFunction((. _existing, _options) => someLocalState())),
           ],
           (),
         ),

@@ -59,7 +59,7 @@ let useLazyQuery:
     ~ssr=?,
     (),
   ) => {
-    let safeParse = Utils.safeParse(Operation.parse)
+    let safeParse = Utils.safeParse(. Operation.parse)
     let jsQueryTuple = Js_.useLazyQuery(.
       Operation.query,
       LazyQueryHookOptions.toJs(
@@ -133,7 +133,7 @@ let useLazyQueryWithVariables:
     ~ssr=?,
     variables,
   ) => {
-    let safeParse = Utils.safeParse(Operation.parse)
+    let safeParse = Utils.safeParse(. Operation.parse)
 
     let jsQueryTuple = Js_.useLazyQuery(.
       Operation.query,
