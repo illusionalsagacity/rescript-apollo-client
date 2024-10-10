@@ -54,7 +54,7 @@ module Options = {
       | DelayFunctionOptions(delayFunctionOptions) =>
         Js_.T_delayUnion.delayFunctionOptions(delayFunctionOptions)
       | DelayFunction(delayFunction) =>
-        Js_.T_delayUnion.delayFunction(delayFunction->DelayFunction.toJs)
+        DelayFunction.toJs(.delayFunction)->Js_.T_delayUnion.delayFunction
       }
     ),
     attempts: ?t.attempts->Belt.Option.mapU((. attempts) =>
@@ -62,7 +62,7 @@ module Options = {
       | RetryFunctionOptions(retryFunctionOptions) =>
         Js_.T_attemptsUnion.retryFunctionOptions(retryFunctionOptions->RetryFunctionOptions.toJs)
       | RetryFunction(retryFunction) =>
-        Js_.T_attemptsUnion.retryFunction(retryFunction->RetryFunction.toJs)
+        RetryFunction.toJs(. retryFunction)->Js_.T_attemptsUnion.retryFunction
       }
     ),
   }

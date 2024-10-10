@@ -200,7 +200,7 @@ module UpdateQueryFn = {
     ~subscriptionSafeParse,
   ) =>
     (. jsQueryData, {subscriptionData: {data}}) =>
-      switch (jsQueryData->querySafeParse, data->subscriptionSafeParse) {
+      switch (querySafeParse(. jsQueryData), subscriptionSafeParse(. data)) {
       | (Ok(queryData), Ok(subscriptionData)) =>
         t(
           queryData,

@@ -132,7 +132,7 @@ module FieldMerge = {
   let toJs: (. t<'existing>) => Js_.t<'existing> = (. x) =>
     switch x {
     | MergeFunction(mergeFunction) =>
-      Js_.FieldMergeUnion.mergeFunction(. mergeFunction->FieldMergeFunction.toJs)
+      Js_.FieldMergeUnion.mergeFunction(. FieldMergeFunction.toJs(. mergeFunction))
     | True => Js_.FieldMergeUnion.true_
     }
 }

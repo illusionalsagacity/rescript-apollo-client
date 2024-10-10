@@ -79,7 +79,7 @@ module QueryHookOptions = {
     displayName: ?t.displayName,
     errorPolicy: ?t.errorPolicy->Belt.Option.mapU(ErrorPolicy.toJs),
     onCompleted: ?t.onCompleted->Belt.Option.mapU((. onCompleted) =>
-      (. jsData) => safeParse(jsData)->onCompleted
+      (. jsData) => safeParse(. jsData)->onCompleted
     ),
     onError: ?t.onError->Belt.Option.mapU((. onError) =>
       (. jsApolloError) => ApolloError.fromJs(. jsApolloError)->onError
@@ -155,7 +155,7 @@ module LazyQueryHookOptions = {
     displayName: ?t.displayName,
     errorPolicy: ?t.errorPolicy->Belt.Option.mapU(ErrorPolicy.toJs),
     onCompleted: ?t.onCompleted->Belt.Option.mapU((. onCompleted) =>
-      (. jsData) => safeParse(jsData)->onCompleted
+      (. jsData) => safeParse(. jsData)->onCompleted
     ),
     onError: ?t.onError->Belt.Option.mapU((. onError) =>
       (. jsApolloError) => ApolloError.fromJs(. jsApolloError)->onError
@@ -373,7 +373,7 @@ module QueryResult = {
             jsFetchMoreOptions: Js_.t_fetchMoreOptions_updateQueryOptions<'jsData, 'jsVariables>,
           ) =>
             switch (
-              safeParse(previousResult),
+              safeParse(. previousResult),
               jsFetchMoreOptions.fetchMoreResult->Belt.Option.mapU(safeParse),
             ) {
             | (Ok(previousResult), Some(Ok(fetchMoreResult))) =>
@@ -486,7 +486,7 @@ module QueryResult = {
 
     let updateQuery = updateQueryFn =>
       js->Js_.updateQuery((jsPreviousData, options) =>
-        updateQueryFn(jsPreviousData->safeParse, options)->serialize
+        updateQueryFn(safeParse(. jsPreviousData), options)->serialize
       )
 
     {
@@ -793,14 +793,14 @@ module MutationHookOptions = {
       (. jsApolloError) => onError(ApolloError.fromJs(. jsApolloError))
     ),
     onCompleted: ?t.onCompleted->Belt.Option.mapU((. onCompleted) =>
-      (. jsData) => jsData->safeParse->onCompleted
+      (. jsData) => safeParse(. jsData)->onCompleted
     ),
     optimisticResponse: ?switch t.optimisticResponse {
       | None => None
       | Some(optimisticResponse) => Some((variables) => optimisticResponse(variables)->serialize)
     },
     refetchQueries: ?t.refetchQueries->Belt.Option.mapU(RefetchQueryDescription.toJs),
-    update: ?t.update->Belt.Option.mapU((. updater) => MutationUpdaterFn.toJs(updater, ~safeParse)),
+    update: ?t.update->Belt.Option.mapU((. updater) => MutationUpdaterFn.toJs(. updater, ~safeParse)),
     variables: ?t.variables->Belt.Option.mapU((. v) => v->serializeVariables->mapJsVariables),
   }
 }
@@ -906,7 +906,7 @@ module MutationFunctionOptions = {
     ),
     refetchQueries: ?t.refetchQueries->Belt.Option.mapU(RefetchQueryDescription.toJs),
     awaitRefetchQueries: ?t.awaitRefetchQueries,
-    update: ?t.update->Belt.Option.mapU((. updater) => MutationUpdaterFn.toJs(updater, ~safeParse)),
+    update: ?t.update->Belt.Option.mapU((. updater) => MutationUpdaterFn.toJs(. updater, ~safeParse)),
     context: ?t.context,
     fetchPolicy: ?t.fetchPolicy->Belt.Option.mapU(WatchQueryFetchPolicy.toJs),
   }
