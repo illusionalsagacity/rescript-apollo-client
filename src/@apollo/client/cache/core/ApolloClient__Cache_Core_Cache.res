@@ -181,8 +181,7 @@ module ApolloCache = {
       ~fragmentName=?,
       (),
     ) => {
-      let safeParse = Utils.safeParse(Fragment.parse)
-
+      let safeParse = Utils.safeParse(. Fragment.parse)
       js
       ->Js_.readFragment(
         ~options={
@@ -196,7 +195,7 @@ module ApolloCache = {
         (),
       )
       ->Js.toOption
-      ->Belt.Option.map(safeParse)
+      ->Belt.Option.mapU(safeParse)
     }
 
     let readQuery = (
@@ -212,7 +211,7 @@ module ApolloCache = {
       ~canonizeResults=?,
       variables,
     ) => {
-      let safeParse = Utils.safeParse(Operation.parse)
+      let safeParse = Utils.safeParse(. Operation.parse)
 
       js
       ->Js_.readQuery(
@@ -230,7 +229,7 @@ module ApolloCache = {
         ~optimistic,
       )
       ->Js.toOption
-      ->Belt.Option.map(safeParse)
+      ->Belt.Option.mapU(safeParse)
     }
 
     let writeFragment = (
@@ -304,7 +303,7 @@ module ApolloCache = {
       ~update,
       variables,
     ) => {
-      let safeParse = Utils.safeParse(Operation.parse)
+      let safeParse = Utils.safeParse(. Operation.parse)
 
       js
       ->Js_.updateQuery(~options=DataProxy.UpdateQueryOptions.toJs(
@@ -328,7 +327,7 @@ module ApolloCache = {
         ->Js.Nullable.fromOption
       )
       ->Js.toOption
-      ->Belt.Option.map(safeParse)
+      ->Belt.Option.mapU(safeParse)
     }
 
     let updateFragment = (
@@ -343,7 +342,7 @@ module ApolloCache = {
       ~update,
       (),
     ) => {
-      let safeParse = Utils.safeParse(Fragment.parse)
+      let safeParse = Utils.safeParse(. Fragment.parse)
 
       js
       ->Js_.updateFragment(~options=DataProxy.UpdateFragmentOptions.toJs({
@@ -363,7 +362,7 @@ module ApolloCache = {
         ->Js.Nullable.fromOption
       )
       ->Js.toOption
-      ->Belt.Option.map(safeParse)
+      ->Belt.Option.mapU(safeParse)
     }
 
     preserveJsPropsAndContext(

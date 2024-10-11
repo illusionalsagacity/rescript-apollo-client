@@ -49,20 +49,20 @@ module Options = {
   }
 
   let toJs: t => Js_.t = t => {
-    delay: ?t.delay->Belt.Option.map(delay =>
+    delay: ?t.delay->Belt.Option.mapU((. delay) =>
       switch delay {
       | DelayFunctionOptions(delayFunctionOptions) =>
         Js_.T_delayUnion.delayFunctionOptions(delayFunctionOptions)
       | DelayFunction(delayFunction) =>
-        Js_.T_delayUnion.delayFunction(delayFunction->DelayFunction.toJs)
+        DelayFunction.toJs(.delayFunction)->Js_.T_delayUnion.delayFunction
       }
     ),
-    attempts: ?t.attempts->Belt.Option.map(attempts =>
+    attempts: ?t.attempts->Belt.Option.mapU((. attempts) =>
       switch attempts {
       | RetryFunctionOptions(retryFunctionOptions) =>
         Js_.T_attemptsUnion.retryFunctionOptions(retryFunctionOptions->RetryFunctionOptions.toJs)
       | RetryFunction(retryFunction) =>
-        Js_.T_attemptsUnion.retryFunction(retryFunction->RetryFunction.toJs)
+        RetryFunction.toJs(. retryFunction)->Js_.T_attemptsUnion.retryFunction
       }
     ),
   }

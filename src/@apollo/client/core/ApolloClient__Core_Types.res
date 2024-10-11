@@ -147,12 +147,12 @@ module MutationQueryReducer = {
 
   type t<'data> = (Js.Json.t, options<'data>) => Js.Json.t
 
-  let toJs: (
+  let toJs: (.
     t<'data>,
     ~safeParse: Types.safeParse<'data, 'jsData>,
-    . Js.Json.t,
+    Js.Json.t,
     Js_.options<'jsData>,
-  ) => Js.Json.t = (t, ~safeParse, . previousResult, jsOptions) =>
+  ) => Js.Json.t = (. t, ~safeParse, previousResult, jsOptions) =>
     t(
       previousResult,
       {
@@ -175,12 +175,12 @@ module MutationQueryReducersMap = {
 
   type t<'data> = Js.Dict.t<MutationQueryReducer.t<'data>>
 
-  let toJs: (t<'data>, ~safeParse: Types.safeParse<'data, 'jsData>) => Js_.t<'jsData> = (
+  let toJs: (. t<'data>, ~safeParse: Types.safeParse<'data, 'jsData>) => Js_.t<'jsData> = (.
     t,
     ~safeParse,
   ) =>
     Js.Dict.map(
-      (. mutationQueryReducer) => mutationQueryReducer->MutationQueryReducer.toJs(~safeParse),
+      (. mutationQueryReducer) => (. json, options) => MutationQueryReducer.toJs(. mutationQueryReducer, ~safeParse, json, options),
       t,
     )
 }

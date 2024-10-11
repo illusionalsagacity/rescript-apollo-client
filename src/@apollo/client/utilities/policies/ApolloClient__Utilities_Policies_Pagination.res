@@ -32,10 +32,10 @@ module Js_ = {
 }
 
 let concatPagination: KeyArgs.t => FieldPolicy.Js_.t<'existing> = keyArgs =>
-  Js_.concatPagination(. Some(keyArgs->KeyArgs.toJs))
+  Js_.concatPagination(. Some(KeyArgs.toJs(. keyArgs)))
 
 let offsetLimitPagination: KeyArgs.t => FieldPolicy.Js_.t<'existing> = keyArgs =>
-  Js_.offsetLimitPagination(. Some(keyArgs->KeyArgs.toJs))
+  Js_.offsetLimitPagination(. Some(KeyArgs.toJs(. keyArgs)))
 
 let relayStylePagination: KeyArgs.t => FieldPolicy.Js_.t<'existing> = keyArgs =>
-  Js_.relayStylePagination(. Some(keyArgs->KeyArgs.toJs))
+  Js_.relayStylePagination(. Some(KeyArgs.toJs(. keyArgs)))
