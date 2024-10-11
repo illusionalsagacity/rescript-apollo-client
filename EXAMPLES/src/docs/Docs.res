@@ -138,6 +138,7 @@ module MutationTypical = {
                   // combination of readQuery / writeQuery / writeFragment
                   Js.log2("mutate.update To-Do: ", todo)
                   let _unusedRef = writeFragment(
+                    ~id="TodoItem:fragmentToDo", 
                     ~fragment=module(Fragments.TodoItem),
                     ~data={
                       __typename: todo.__typename,
@@ -145,7 +146,7 @@ module MutationTypical = {
                       completed: None,
                       text: "To-Do from writeFragment",
                     },
-                    (),
+                    ()
                   )
                   let _unusedRef = writeQuery(
                     ~query=module(TodosQuery),

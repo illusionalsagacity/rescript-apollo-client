@@ -1,6 +1,6 @@
 {
   "name": "rescript-apollo-client",
-  "uncurried": false,
+  "uncurried": true,
   "package-specs": [
     {
       "module": "commonjs",
